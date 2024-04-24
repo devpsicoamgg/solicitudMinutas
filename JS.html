@@ -1,0 +1,111 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+<script> 
+
+ function mostrarMinuta() {
+      var seleccion = document.getElementById("select-pedido").value;
+      var minutaImg = document.getElementById("minuta-img");
+      var enlaceImg = document.getElementById("enlace-imagen");
+
+      if (seleccion === "01.-_SEMANA_UNO") {
+        minutaImg.src = "https://res.cloudinary.com/dfl8grlvl/image/upload/v1713426048/F2.G6.PP_Semana_1_km9bwi.jpg";
+      } else if (seleccion === "02.-_SEMANA_DOS") {
+        minutaImg.src = "https://res.cloudinary.com/dfl8grlvl/image/upload/v1713472726/F2.G6.PP_Semana_2_tllus5.jpg";
+      } else if (seleccion === "03.-_SEMANA_TRES") {
+        minutaImg.src = "https://res.cloudinary.com/dfl8grlvl/image/upload/v1713472729/F2.G6.PP_Semana_3_u0huab.jpg";
+      } else if (seleccion === "04.-_SEMANA_CUATRO") {
+        minutaImg.src = "https://res.cloudinary.com/dfl8grlvl/image/upload/v1713472732/F2.G6.PP_Semana_4_re4i7l.jpg";
+      } else if (seleccion === "05.-_SEMANA_CINCO") {
+        minutaImg.src = "https://res.cloudinary.com/dfl8grlvl/image/upload/v1713472726/F2.G6.PP_Semana_5_jiu4wt.jpg";
+      } else if (seleccion === "06.-_PEDIDO MENSUAL_ABARROTES") {
+        minutaImg.style.display = "none";
+        enlaceImg.style.display = "none";
+        return;
+      }
+
+      enlaceImg.href = minutaImg.src;
+
+      minutaImg.style.display = "block";
+      enlaceImg.style.display = "block";
+    }
+
+
+
+
+
+function mostrarDatos() {
+    var selectCDI = document.getElementById("cdi");
+    var selectedValue = selectCDI.options[selectCDI.selectedIndex].value;
+    var iframeContigo = document.getElementById("presentacion-contigo");
+
+    if (selectedValue === "CONTIGO CON TODO") {
+        iframeContigo.style.display = "block";
+        iframeContigo.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy30HfT4TvnP597BbMM8DLL0gX9kDlnoJmlAom6rnEYHhisizdnYfaafWwV5AUILb2aaizGTnw9_2r/pubhtml?gid=544168517&single=true";
+    } else if (selectedValue === "CDI AMANECER FELIZ - GRANADA") {
+        iframeContigo.style.display = "block";
+        iframeContigo.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy30HfT4TvnP597BbMM8DLL0gX9kDlnoJmlAom6rnEYHhisizdnYfaafWwV5AUILb2aaizGTnw9_2r/pubhtml?gid=237018915&single=true";
+    } else if (selectedValue === "LOS PRIMEROS PASOS DE CARLITOS - PASCA") {
+        iframeContigo.style.display = "block";
+        iframeContigo.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy30HfT4TvnP597BbMM8DLL0gX9kDlnoJmlAom6rnEYHhisizdnYfaafWwV5AUILb2aaizGTnw9_2r/pubhtml?gid=1519306834&single=true";
+    } else if (selectedValue === "CRECIENDO JUNTOS") {
+        iframeContigo.style.display = "block";
+        iframeContigo.src = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRy30HfT4TvnP597BbMM8DLL0gX9kDlnoJmlAom6rnEYHhisizdnYfaafWwV5AUILb2aaizGTnw9_2r/pubhtml?gid=192888498&single=true";
+    } else {
+        iframeContigo.style.display = "none";
+    }
+}
+
+(() => {
+    'use strict'
+
+    const form = document.getElementById('formularioMinutas')
+    const enviarBtn = document.getElementById('enviarBtn')
+
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+      enviarBtn.disabled = true; // Deshabilita el botón al enviar el formulario
+    }, false)
+
+    // Habilita el botón cuando se ha validado el formulario
+    form.addEventListener('input', () => {
+      if (form.checkValidity()) {
+        enviarBtn.disabled = false;
+      }
+    });
+
+    // Habilita el botón si ocurre algún error
+    form.addEventListener('invalid', () => {
+      enviarBtn.disabled = false;
+    });
+
+  })()
+
+
+
+ function mostrarOcultarDetalles() {
+    var select = document.getElementById("select-pedido");
+    var detallesAbarrotes = document.querySelector(".abarrotes");
+    var categorias = document.querySelectorAll(".carnesyhuevos, .frutasyverduras, .lacteos, .panaderia");
+
+    if (select.value === "06.-_PEDIDO MENSUAL_ABARROTES") {
+      detallesAbarrotes.classList.remove("d-none");
+      categorias.forEach(function(categoria) {
+        categoria.classList.add("d-none");
+      });
+    } else {
+      detallesAbarrotes.classList.add("d-none");
+      categorias.forEach(function(categoria) {
+        categoria.classList.remove("d-none");
+      });
+    }
+  }
+
+
+
+</script>

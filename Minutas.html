@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('CSS'); ?>
+  </head>
+  <body>
+    
+    
+    <div class="container">
+    <h1> EJEMPLO PARA PEDIDO DE MINÚTAS </h1>
+    <br/>
+    
+
+    <form id="formularioMinutas" name="formularioMinutas" class="needs-validation" method="post" action="<?= pubUrl ?>" onsubmit="submitForm(event)">
+
+  <div class="introduction">
+
+
+ <div class="form-group">
+    <label for="semana">Semana para Pedido:</label>
+  <select class="form-select" id="select-pedido" name="semana" onchange="mostrarOcultarDetalles(); mostrarMinuta()" required style="padding: 5px;">
+      <option value="" disabled selected>Semana pedido 📅:</option>
+      <option value="01.-_SEMANA_UNO" style="background-color: #ffcccc;">🍏 Semana 1 - Uno.</option>
+      <option value="02.-_SEMANA_DOS" style="background-color: #ccffcc;">🍊 Semana 2 - Dos.</option>
+      <option value="03.-_SEMANA_TRES" style="background-color: #ccccff;">🍇 Semana 3 - Tres.</option>
+      <option value="04.-_SEMANA_CUATRO" style="background-color: #ffffcc;">🍓 Semana 4 - Cuatro.</option>
+      <option value="05.-_SEMANA_CINCO" style="background-color: #ffccff;">🍌 Semana 5 - Cinco.</option>
+      <option value="06.-_PEDIDO MENSUAL_ABARROTES" style="background-color: #ccffff;">Pedido Mensual Abarrotes 🛒</option>
+    </select>
+</div>
+
+
+    <div class="form-group">
+      <label for="mesPedido">Mes 📅:</label>
+      <select class="form-select" id="mesPedido" name="mesPedido" required>
+        <option value="" disabled selected>Selecciona el mes 📅:</option>
+        <option value="Enero">Enero</option>
+        <option value="Febrero">Febrero</option>
+        <option value="Marzo">Marzo</option>
+        <option value="Abril">Abril</option>
+        <option value="Mayo">Mayo</option>
+        <option value="Junio">Junio</option>
+        <option value="Julio">Julio</option>
+        <option value="Agosto">Agosto</option>
+        <option value="Septiembre">Septiembre</option>
+        <option value="Octubre">Octubre</option>
+        <option value="Noviembre">Noviembre</option>
+        <option value="Diciembre">Diciembre</option>
+      </select>
+    </div>
+
+
+<!-- Nuevo campo: Fecha de Pedido -->
+<div class="form-group">
+  <label for="fechaPedido">Fecha de Pedido 📅:</label>
+  <input type="date" class="form-control" id="fechaPedido" name="fechaPedido" required>
+</div>
+
+<script>
+  var fechaActual = new Date();
+  var formatoFecha = fechaActual.toISOString().split('T')[0];
+  document.getElementById('fechaPedido').value = formatoFecha;
+</script>
+
+<div class="form-group">
+        <label for="cdi">GRUPO 🏬:</label>
+        <select class="form-select" id="cdi" name="cdi" onchange="mostrarDatos()" required>
+            <option value="" disabled selected>Seleccione el grupo 💕</option>
+            <option value="GRUPO 1" style="background-color: #ffcccc;">GRUPO 1😊</option>
+            <option value="GRUPO 2" style="background-color: #ccffcc;">GRUPO 2😎</option>
+            <option value="GRUPO 3" style="background-color: #ccccff;">GRUPO 3 😉</option>
+            <option value="GRUPO 4" style="background-color: #F3E796;">GRUPO 4 😉</option>
+        </select>
+    </div>
+
+</div>
+
+
+<div style="display: flex; justify-content: space-between;">
+ <div class="form-group">
+        <label for="cupo1a5"> Cupo 👦 y 👧 de 1 a 5 años:</label>
+        <input type="number" class="form-control" id="cupo1a5" name="cupo1a5" placeholder="Ingrese el cupo de niños y niñas de 1 a 5 años" required>
+    </div>
+
+    <div class="form-group">
+        <label for="cupo6a11">Cupo de 👶🏽 y 👶🏽 de 6 a 11 meses:</label>
+        <input type="number" class="form-control" id="cupo6a11" name="cupo6a11" placeholder="Ingrese el cupo de niños y niñas de 6 a 11 meses" required>
+    </div>
+
+    <div class="form-group">
+        <label for="diasAtencion">Número días de atención 📅:</label>
+        <input type="number" class="form-control" id="diasAtencion" name="diasAtencion" placeholder="Ingrese el número proyectado de días de atención" required>
+    </div>
+
+ <!-- Nuevo campo: Responsable de la Solicitud -->
+  <div class="form-group">
+    <label for="responsable">Responsable Solicitud 🤷🏻:</label>
+    <input type="text" class="form-control" id="responsable" name="responsable" placeholder="✍🏽 Nombre de quien diligencia" required>
+  </div>
+
+  </div>
+
+<div style="display: flex; justify-content: center;">
+    
+    <a href="#" id="enlace-imagen" target="_blank">
+    <img id="minuta-img" style="display: none; width: 400px; height: 240px; margin: 0 auto; cursor: pointer;" src="" alt="Minuta Semanal">
+    </a>
+    <iframe id="presentacion-contigo" frameborder="1" width="400" height="240" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" style="display: none; margin: 0 auto;"></iframe>
+</div>
+
+
+ <!-- Categoría: Abarrotes -->
+<details class="abarrotes" name="form-structure">
+  <summary>Pedido mensual de Abarrotes 🍱 </summary>
+  <div class="row">
+    <!-- Primera Columna -->
+    <div class="col">
+      <!-- Aceite Vegetal -->
+      <div class="form-group custom-border">
+        <label for="aceiteVegetal">🪔Aceite Vegetal * cc³:</label>
+        <input type="number" class="form-control mb-1" id="aceiteVegetalExistencia" name="aceiteVegetalExistencia" placeholder="Existencia" hidden >
+        <input type="number" class="form-control mb-1" id="aceiteVegetalPedido" name="aceiteVegetalPedido" placeholder="Pedido de 🪔 aceite " >
+      </div>
+
+      <!-- Arroz -->
+      <div class="form-group custom-border">
+        <label for="arroz">🍚 Arroz * grs:</label>
+        <input type="number" class="form-control mb-1" id="arrozExistencia" name="arrozExistencia" placeholder="Existencia" hidden >
+        <input type="number" class="form-control mb-1" id="arrozPedido" name="arrozPedido" placeholder="Pedido de 🍚 arroz" >
+      </div>
+
+      <!-- Arveja Seca -->
+      <div class="form-group custom-border">
+        <label for="arvejaSeca">🌿 Arveja Seca * grs:</label>
+        <input type="number" class="form-control mb-1" id="arvejaSecaExistencia" name="arvejaSecaExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="arvejaSecaPedido" name="arvejaSecaPedido" placeholder="Pedido de 🌿 arveja" >
+      </div>
+
+      <!-- Avena -->
+      <div class="form-group custom-border">
+        <label for="avena">🌾 Avena * grs:</label>
+        <input type="number" class="form-control mb-1" id="avenaExistencia" name="avenaExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="avenaPedido" name="avenaPedido" placeholder="Pedido de 🌾 avena" >
+      </div>
+    </div>
+
+    <!-- Segunda Columna -->
+    <div class="col">
+      <!-- Azúcar -->
+      <div class="form-group custom-border">
+        <label for="azucar">🍙 Azúcar * grs:</label>
+        <input type="number" class="form-control mb-1" id="azucarExistencia" name="azucarExistencia" placeholder="Existencia" hidden >
+        <input type="number" class="form-control mb-1" id="azucarPedido" name="azucarPedido" placeholder="Pedido de 🍙 azucar">
+      </div>
+
+      <!-- Bienestarina -->
+      <div class="form-group custom-border">
+        <label for="bienestarina">🥣 Bienestarina * grs:</label>
+        <input type="number" class="form-control mb-1" id="bienestarinaExistencia" name="bienestarinaExistencia" placeholder="Existencia" hidden >
+        <input type="number" class="form-control mb-1" id="bienestarinaPedido" name="bienestarinaPedido" placeholder="Pedido de 🥣 AAVN" readonly>
+      </div>
+
+      <!-- Frijol Cargamanto -->
+      <div class="form-group custom-border">
+        <label for="frijolCargamanto">🌿Frijol Cargamanto * grs:</label>
+        <input type="number" class="form-control mb-1" id="frijolCargamantoExistencia" name="frijolCargamantoExistencia" placeholder="Existencia" hidden >
+        <input type="number" class="form-control mb-1" id="frijolCargamantoPedido" name="frijolCargamantoPedido" placeholder="Pedido de 🌿 frijol" >
+      </div>
+
+      <!-- Harina de Maizena -->
+      <div class="form-group custom-border">
+        <label for="harinaMaizena">🍘 Harina de Maizena * grs:</label>
+        <input type="number" class="form-control mb-1" id="harinaMaizenaExistencia" name="harinaMaizenaExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="harinaMaizenaPedido" name="harinaMaizenaPedido" placeholder="Pedido de 🍘 maizena" >
+      </div>
+    </div>
+
+    <!-- Tercera Columna -->
+    <div class="col">
+      <!-- Harina de Trigo -->
+      <div class="form-group custom-border">
+        <label for="harinaTrigo">🍘Harina de Trigo * grs:</label>
+        <input type="number" class="form-control mb-1" id="harinaTrigoExistencia" name="harinaTrigoExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="harinaTrigoPedido" name="harinaTrigoPedido" placeholder="Pedido de 🍘 harina de trigo" >
+      </div>
+
+      <!-- Lentejas -->
+      <div class="form-group custom-border">
+        <label for="lentejas"> 🍘Lentejas * grs:</label>
+        <input type="number" class="form-control mb-1" id="lentejasExistencia" name="lentejasExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="lentejasPedido" name="lentejasPedido" placeholder="Pedido 🍘  lentejas" >
+      </div>
+
+      <!-- Pastas Alimenticias -->
+      <div class="form-group custom-border">
+        <label for="pastasAlimenticias">🍝 Pastas Alimenticias * grs:</label>
+        <input type="number" class="form-control mb-1" id="pastasAlimenticiasExistencia" name="pastasAlimenticiasExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="pastasAlimenticiasPedido" name="pastasAlimenticiasPedido" placeholder="Pedido de 🍝 pastas" >
+      </div>
+
+      <!-- Sal -->
+      <div class="form-group custom-border">
+        <label for="sal">🍙 Sal * grs:</label>
+        <input type="number" class="form-control mb-1" id="salExistencia" name="salExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="salPedido" name="salPedido" placeholder="Pedido de 🍙 sal" >
+      </div>
+    </div>
+  </div>
+</details>
+
+  <!-- Categoría: Carnes & Huevos -->
+<details class="carnesyhuevos" name="form-structure">
+  <summary>Pedido Semanal Carnes 🥩 & Huevos 🥚 </summary>
+  <div class="row">
+    <!-- Primera Columna -->
+    <div class="col">
+      <div class="form-group custom-border">
+        <label for="carneMolidaRes">🥩 Carne Molida de Res * grs:</label>
+        <input type="number" class="form-control mb-1" id="carneMolidaResExistencia" name="carneMolidaResExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="carneMolidaResPedido" name="carneMolidaResPedido" placeholder="Pedido 🥩 molida" >
+      </div>
+
+      <div class="form-group custom-border">
+        <label for="carnePicar">🥩 Carne para Picar o Goulash * grs:</label>
+        <input type="number" class="form-control mb-1" id="carnePicarExistencia" name="carnePicarExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="carnePicarPedido" name="carnePicarPedido" placeholder="Pedido 🥩 picar" >
+      </div>
+    </div>
+
+    <!-- Segunda Columna -->
+    <div class="col">
+      <div class="form-group custom-border">
+        <label for="higado">🥩 Hígado * grs:</label>
+        <input type="number" class="form-control mb-1" id="higadoExistencia" name="higadoExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="higadoPedido" name="higadoPedido" placeholder="Pedido 🥩 hígado" >
+      </div>
+
+      <div class="form-group custom-border">
+        <label for="pechugaPollo">🐔 Pechuga de Pollo* grs :</label>
+        <input type="number" class="form-control mb-1" id="pechugaPolloExistencia" name="pechugaPolloExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="pechugaPolloPedido" name="pechugaPolloPedido" placeholder="Pedido pechuga de 🐔" >
+      </div>
+    </div>
+
+      <div class="form-group custom-border">
+        <label for="huevo"> 🥚 Huevo * unidad* grs :</label>
+        <input type="number" class="form-control mb-1" id="huevoExistencia" name="huevoExistencia" placeholder="Existencia" hidden>
+        <input type="number" class="form-control mb-1" id="huevoPedido" name="huevoPedido" placeholder="Pedido de 🥚 huevos" >
+      </div>
+  </div>
+</details>
+
+  <!-- Categoría: Frutas & Verduras -->
+<details class="frutasyverduras" name="form-structure">
+    <summary>Pedido Semanal Frutas 🍉 & Verduras 🥕</summary>
+    <div class="row">
+    <div class="col">
+
+ <div class="form-group custom-border">
+    <label for="acelga">🥬Acelga * grs:</label>
+    <input type="number" class="form-control mb-1" id="acelgaExistencia" name="acelgaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="acelgaPedido" name="acelgaPedido" placeholder="Pedido 🥬 acelga" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="aguacate">🥑Aguacate * grs:</label>
+    <input type="number" class="form-control mb-1" id="aguacateExistencia" name="aguacateExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="aguacatePedido" name="aguacatePedido" placeholder="Pedido 🥑 aguacate" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="ajo">🧄Ajo * grs:</label>
+    <input type="number" class="form-control mb-1" id="ajoExistencia" name="ajoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="ajoPedido" name="ajoPedido" placeholder="Pedido 🧄 ajo" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="banano">🍌Banano * grs:</label>
+    <input type="number" class="form-control mb-1" id="bananoExistencia" name="bananoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="bananoPedido" name="bananoPedido" placeholder="Pedido 🍌 banano" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="cebollaCabezona">🧅Cebolla Cabezona * grs :</label>
+    <input type="number" class="form-control mb-1" id="cebollaCabezonaExistencia" name="cebollaCabezonaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="cebollaCabezonaPedido" name="cebollaCabezonaPedido" placeholder="Pedido 🧅 cebolla" >
+  </div>
+
+    <div class="form-group custom-border">
+    <label for="cebollaJunca">🌿Cebolla Junca * grs:</label>
+    <input type="number" class="form-control mb-1" id="cebollaJuncaExistencia" name="cebollaJuncaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="cebollaJuncaPedido" name="cebollaJuncaPedido" placeholder="Pedido" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="espinacas">🌾Espinacas * grs:</label>
+    <input type="number" class="form-control mb-1" id="espinacasExistencia" name="espinacasExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="espinacasPedido" name="espinacasPedido" placeholder="Pedido 🌾 espinacas" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="fresa">🍓Fresa * grs:</label>
+    <input type="number" class="form-control mb-1" id="fresaExistencia" name="fresaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="fresaPedido" name="fresaPedido" placeholder="Pedido 🍓 fresas" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="guatila">🍈Guatila * grs:</label>
+    <input type="number" class="form-control mb-1" id="guatilaExistencia" name="guatilaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="guatilaPedido" name="guatilaPedido" placeholder="Pedido 🍈 guatila" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="habichuela">👩🏽‍🌾Habichuela * grs:</label>
+    <input type="number" class="form-control mb-1" id="habichuelaExistencia" name="habichuelaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="habichuelaPedido" name="habichuelaPedido" placeholder="Pedido 👩🏽‍🌾 habichuelas" >
+  </div>
+
+
+
+</div>
+
+
+
+       <div class="col">
+  <div class="form-group custom-border">
+    <label for="lechugaComun">🥬Lechuga Común * grs:</label>
+    <input type="number" class="form-control mb-1" id="lechugaComunExistencia" name="lechugaComunExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="lechugaComunPedido" name="lechugaComunPedido" placeholder="Pedido 🥬 lechuga" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="limon">🍋Limón * grs:</label>
+    <input type="number" class="form-control mb-1" id="limonExistencia" name="limonExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="limonPedido" name="limonPedido" placeholder="Pedido 🍋 limon" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="mandarina">🍊Mandarina * grs:</label>
+    <input type="number" class="form-control mb-1" id="mandarinaExistencia" name="mandarinaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="mandarinaPedido" name="mandarinaPedido" placeholder="Pedido 🍊 manarina" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="mango">🥭Mango * grs:</label>
+    <input type="number" class="form-control mb-1" id="mangoExistencia" name="mangoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="mangoPedido" name="mangoPedido" placeholder="Pedido 🥭 mango" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="melon">🍈Melón * grs:</label>
+    <input type="number" class="form-control mb-1" id="melonExistencia" name="melonExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="melonPedido" name="melonPedido" placeholder="Pedido 🍈 melón" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="naranja">🍊Naranja * grs:</label>
+    <input type="number" class="form-control mb-1" id="naranjaExistencia" name="naranjaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="naranjaPedido" name="naranjaPedido" placeholder="Pedido 🍊 naranja" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="papa">🥔Papa * grs:</label>
+    <input type="number" class="form-control mb-1" id="papaExistencia" name="papaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="papaPedido" name="papaPedido" placeholder="Pedido 🥔 papa" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="papaCriolla">🥔Papa Criolla * grs:</label>
+    <input type="number" class="form-control mb-1" id="papaCriollaExistencia" name="papaCriollaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="papaCriollaPedido" name="papaCriollaPedido" placeholder="Pedido 🥔 papa criolla" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="papaya">🏉Papaya * grs:</label>
+    <input type="number" class="form-control mb-1" id="papayaExistencia" name="papayaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="papayaPedido" name="papayaPedido" placeholder="Pedido 🏉 papaya" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="patilla">🍉Patilla * grs:</label>
+    <input type="number" class="form-control mb-1" id="patillaExistencia" name="patillaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="patillaPedido" name="patillaPedido" placeholder="Pedido 🍉 patilla" >
+  </div>
+</div>
+
+
+
+<div class="col">
+  <div class="form-group custom-border">
+    <label for="pepino">🥒Pepino* grs:</label>
+    <input type="number" class="form-control mb-1" id="pepinoExistencia" name="pepinoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="pepinoPedido" name="pepinoPedido" placeholder="Pedido 🥒 pepino" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="pina">🍍Piña * grs:</label>
+    <input type="number" class="form-control mb-1" id="pinaExistencia" name="pinaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="pinaPedido" name="pinaPedido" placeholder="Pedido 🍍 piña" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="platanoHarton">🍌Plátano Hartón * grs:</label>
+    <input type="number" class="form-control mb-1" id="platanoHartonExistencia" name="platanoHartonExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="platanoHartonPedido" name="platanoHartonPedido" placeholder="Pedido 🍌 platano hartón" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="platanoMaduro">🍌Plátano Maduro * grs:</label>
+    <input type="number" class="form-control mb-1" id="platanoMaduroExistencia" name="platanoMaduroExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="platanoMaduroPedido" name="platanoMaduroPedido" placeholder="Pedido 🍌 platano maduro" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="platanoVerde">🍌Plátano Verde * grs:</label>
+    <input type="number" class="form-control mb-1" id="platanoVerdeExistencia" name="platanoVerdeExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="platanoVerdePedido" name="platanoVerdePedido" placeholder="Pedido 🍌 platano verde" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="remolacha">🔴Remolacha* grs:</label>
+    <input type="number" class="form-control mb-1" id="remolachaExistencia" name="remolachaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="remolachaPedido" name="remolachaPedido" placeholder="Pedido 🔴 remoclacha" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="tomateChonto">🍅Tomate Chonto* grs:</label>
+    <input type="number" class="form-control mb-1" id="tomateChontoExistencia" name="tomateChontoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="tomateChontoPedido" name="tomateChontoPedido" placeholder="Pedido tomate chonto" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="tomateGuiso">🍅Tomate de Guiso* grs:</label>
+    <input type="number" class="form-control mb-1" id="tomateGuisoExistencia" name="tomateGuisoExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="tomateGuisoPedido" name="tomateGuisoPedido" placeholder="Pedido 🍅 tomete guiso" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="yuca">🥔Yuca * grs:</label>
+    <input type="number" class="form-control mb-1" id="yucaExistencia" name="yucaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="yucaPedido" name="yucaPedido" placeholder="Pedido 🥔 yuca" >
+  </div>
+
+  <div class="form-group custom-border">
+    <label for="zanahoria">🥕Zanahoria * grs:</label>
+    <input type="number" class="form-control mb-1" id="zanahoriaExistencia" name="zanahoriaExistencia" placeholder="Existencia" hidden>
+    <input type="number" class="form-control mb-1" id="zanahoriaPedido" name="zanahoriaPedido" placeholder="Pedido 🥕 zanahoria" >
+  </div>
+</div>
+    </div>
+</details>
+
+  <!-- Categoría: Lácteos & Quesos -->
+<details class="lacteos" name="form-structure">
+    <summary>Pedido Semanal Lácteos 🥛 & Quesos 🧀 </summary>
+    <div class="row">
+        <div class="col">
+            <div class="form-group custom-border">
+                <label for="kumis">🥛Kumis * cc³:</label>
+                <input type="number" class="form-control mb-1" id="kumisExistencia" name="kumisExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="kumisPedido" name="kumisPedido" placeholder="Pedido 🥛 kumis" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="leche">🥛Leche * cc³:</label>
+                <input type="number" class="form-control mb-1" id="lecheExistencia" name="lecheExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="lechePedido" name="lechePedido" placeholder="Pedido 🥛 leche" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="mantequilla">🧈Mantequilla * grs:</label>
+                <input type="number" class="form-control mb-1" id="mantequillaExistencia" name="mantequillaExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="mantequillaPedido" name="mantequillaPedido" placeholder="Pedido 🧈 mantequilla" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group custom-border">
+                <label for="queso">🧀Queso * grs:</label>
+                <input type="number" class="form-control mb-1" id="quesoExistencia" name="quesoExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="quesoPedido" name="quesoPedido" placeholder="Pedido 🧀 queso" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="quesoCampesino">🧀Queso Campesino * grs:</label>
+                <input type="number" class="form-control mb-1" id="quesoCampesinoExistencia" name="quesoCampesinoExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="quesoCampesinoPedido" name="quesoCampesinoPedido" placeholder="Pedido 🧀 queso campesino" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="yogurt">🥃Yogurt * cc³:</label>
+                <input type="number" class="form-control mb-1" id="yogurtExistencia" name="yogurtExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="yogurtPedido" name="yogurtPedido" placeholder="Pedido 🥃 Yogurt" >
+            </div>
+        </div>
+    </div>
+</details>
+
+  <!-- Categoría: Producto de Panadería -->
+<details class="panaderia" name="form-structure">
+    <summary>Pedido Semanal Producto de Panadería 🍞</summary>
+    <div class="row">
+        <div class="col">
+            <div class="form-group custom-border">
+                <label for="calao">🥯Calao' * grs:</label>
+                <input type="number" class="form-control mb-1" id="calaoExistencia" name="calaoExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="calaoPedido" name="calaoPedido" placeholder="Pedido 🥯calao' " >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="galletaLeche">🍪Galleta de Leche * grs:</label>
+                <input type="number" class="form-control mb-1" id="galletaLecheExistencia" name="galletaLecheExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="galletaLechePedido" name="galletaLechePedido" placeholder="Pedido 🍪 de leche" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="galletaSoda">🍪Galleta de Soda * grs:</label>
+                <input type="number" class="form-control mb-1" id="galletaSodaExistencia" name="galletaSodaExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="galletaSodaPedido" name="galletaSodaPedido" placeholder="Pedido 🍪 de soda" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="galletaSodaDulce">🍪Galleta de Soda Dulce * grs:</label>
+                <input type="number" class="form-control mb-1" id="galletaSodaDulceExistencia" name="galletaSodaDulceExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="galletaSodaDulcePedido" name="galletaSodaDulcePedido" placeholder="Pedido 🍪 de soda dulce" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="mogolla">🥮Mogolla * grs:</label>
+                <input type="number" class="form-control mb-1" id="mogollaExistencia" name="mogollaExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="mogollaPedido" name="mogollaPedido" placeholder="Pedido 🥮 mogolla" >
+            </div>
+
+        </div>
+        <div class="col">
+            <div class="form-group custom-border">
+                <label for="panBlanco">🥟Pan Blanco * grs:</label>
+                <input type="number" class="form-control mb-1" id="panBlancoExistencia" name="panBlancoExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="panBlancoPedido" name="panBlancoPedido" placeholder="Pedido  🥟 pan blanco" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="panRollo">🥟Pan Rollo * grs:</label>
+                <input type="number" class="form-control mb-1" id="panRolloExistencia" name="panRolloExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="panRolloPedido" name="panRolloPedido" placeholder="Pedido 🥟 pan rollo" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="panTajado">🍞Pan Tajado * grs:</label>
+                <input type="number" class="form-control mb-1" id="panTajadoExistencia" name="panTajadoExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="panTajadoPedido" name="panTajadoPedido" placeholder="Pedido 🍞 pan tajado" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="ponqueTorta"> 🥧Ponque / Torta * grs:</label>
+                <input type="number" class="form-control mb-1" id="ponqueTortaExistencia" name="ponqueTortaExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="ponqueTortaPedido" name="ponqueTortaPedido" placeholder="Pedido 🥧 ponque / torta" >
+            </div>
+
+            <div class="form-group custom-border">
+                <label for="tostada"> 🧇Tostada * grs:</label>
+                <input type="number" class="form-control mb-1" id="tostadaExistencia" name="tostadaExistencia" placeholder="Existencia" hidden>
+                <input type="number" class="form-control mb-1" id="tostadaPedido" name="tostadaPedido" placeholder="Pedido 🧇 tostada" >
+            </div>
+        </div>
+    </div>
+</details>
+
+
+        <div class="mb-3">
+    <div class="form-check custom-black-border">
+        <label for="certifico" class="form-check-label">Certifico que la información enviada ha sido verificada y validada</label>
+        <input type="checkbox" class="form-check-input" id="certifico" name="certifico" required>
+    </div>
+</div>
+
+  
+
+
+  
+ <button id="enviarBtn" type="submit" class="btn btn-primary">Enviar</button>
+
+
+
+
+</form>
+
+
+
+</form>
+
+      
+      
+    </div>
+    <?!= include('JS'); ?>
+  </body>
+</html>
